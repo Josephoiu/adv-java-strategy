@@ -5,6 +5,7 @@ public class CustomerOrder {
     private String customerName;
     private double billAmount;
     private char discountType;
+    private DiscountStrategy discountStrategy;
 
     public CustomerOrder(String customerName, double billAmount, char discountType) {
         this.customerName = customerName;
@@ -17,15 +18,18 @@ public class CustomerOrder {
         switch (discountType) {
             case 'S':
             case 's':
-                tempBill = billAmount - (billAmount * 0.1);
+                setDiscountStrategy(new DiscountTypeS());
+                tempBill = discountStrategy.discount(billAmount);
                 break;
             case 'D':
             case 'd':
-                tempBill = billAmount - (billAmount * 0.5);
+                setDiscountStrategy(new DiscountTypeD());
+                tempBill = discountStrategy.discount(billAmount);
                 break;
             case 'L':
             case 'l':
-                tempBill = billAmount - (billAmount * 0.75);
+                setDiscountStrategy(new DiscountTypeL());
+                tempBill = discountStrategy.discount(billAmount);
                 break;
             default:
                 tempBill = billAmount;
@@ -43,6 +47,10 @@ public class CustomerOrder {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    public void setDiscountStrategy(DiscountStrategy strategy) {
+        this.discountStrategy = strategy;
     }
 
     @Override
